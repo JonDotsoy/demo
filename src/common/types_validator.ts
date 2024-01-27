@@ -17,3 +17,9 @@ export const parseConfigEditorWatch = (value: unknown) => isObject(value)
   && every<string>(value.editorWatch, isString)
   ? value.editorWatch
   : null
+
+export const parseConfigDemoLocation = (value: unknown) => isObject(value)
+  && hasProperty(value, 'demoLocation')
+  && isString(value.demoLocation)
+  ? value.demoLocation
+  : null

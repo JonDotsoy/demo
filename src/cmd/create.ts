@@ -1,7 +1,7 @@
 import { flag, flags, isBooleanAt, makeHelmMessage, rule, type Rule } from "@jondotsoy/flags";
 import { createWorkspace } from "../create_workspace";
 import { ulid } from "ulid";
-import { demosLocation } from "../config";
+import { globalConfig } from "../common/load_local_config";
 
 export const create = async (args: string[]) => {
   type Options = {
@@ -20,7 +20,7 @@ export const create = async (args: string[]) => {
 
   if (showHelp) return console.log(makeHelmMessage('demo create', rules, ['', '--rm']))
 
-  const location = new URL(`${ulid()}/`, demosLocation);
+  const location = new URL(`${ulid()}/`, globalConfig.demosLocation);
 
   await createWorkspace({
     location,
