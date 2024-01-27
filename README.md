@@ -1,15 +1,11 @@
 # demo
 
-To install dependencies:
+The `demo` project provides a simple and efficient way to manage temporal workspaces. It offers a straightforward setup process using `make` or `bun install` for dependency management. The usage is user-friendly, allowing the creation of new workspaces with the `demo create` command, and supports clean slate operations with the `demo create --rm` option to remove the workspace before creation.
 
-```bash
-bun install
-```
+## Setup
 
-To run:
+Install with `make` o install the dependencies with `bun install`
 
-```bash
-bun run src/cli.ts
-```
+## Usage
 
-This project was created using `bun init` in bun v1.0.24. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Create a new workspace with `demo create` if you need remove the workspace before use `demo create --rm`.

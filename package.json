@@ -1,5 +1,6 @@
 {
   "name": "demo",
+  "description": "Effortlessly manage temporal workspaces",
   "module": "src/cli.ts",
   "type": "module",
   "devDependencies": {
