@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.3](https://github.com/JonDotsoy/demo/compare/v1.0.2...v1.0.3) (2024-01-28)
+
+
+### Features
+
+* improve archive naming convention for ([7ee5b56](https://github.com/JonDotsoy/demo/commit/7ee5b565476c1221a1d950435b17b58a515e8ad7))
+
+
+### Miscellaneous Chores
+
+* release 1.0.3 ([02fbe7c](https://github.com/JonDotsoy/demo/commit/02fbe7c6eea16fbe569b09a5fe846a8ffc90a361))
+
 ## [1.0.2](https://github.com/JonDotsoy/demo/compare/v1.0.1...v1.0.2) (2024-01-28)
 
 
