@@ -32,7 +32,7 @@ jobs:
     if: needs.release-please.outputs.releases_created == 'true'
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: antongolub/action-setup-bun@v1
       - run: bun install && bun run build
       - run: tar -cvzf demo-$(uname -s)-$(uname -m).tar.gz -C dist demo
       - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-$(uname -s)-$(uname -m).tar.gz
@@ -44,7 +44,7 @@ jobs:
     if: needs.release-please.outputs.releases_created == 'true'
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: antongolub/action-setup-bun@v1
       - run: bun install && bun run build
       - run: tar -cvzf demo-$(uname -s)-$(uname -m).tar.gz -C dist demo
       - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-$(uname -s)-$(uname -m).tar.gz
@@ -57,7 +57,7 @@ jobs:
     if: needs.release-please.outputs.releases_created == 'true'
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v1
+      - uses: antongolub/action-setup-bun@v1
       - run: bun install && bun run build
       - run: tar -cvzf demo-$(uname -s)-$(uname -m).tar.gz -C dist demo
       - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-$(uname -s)-$(uname -m).tar.gz
