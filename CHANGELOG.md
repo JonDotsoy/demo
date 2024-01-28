@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/JonDotsoy/demo/compare/v1.0.0...v1.0.1) (2024-01-28)
+
+
+### Miscellaneous Chores
+
+* release 1.0.1 ([9c754d6](https://github.com/JonDotsoy/demo/commit/9c754d6fd3c6d2d2c811c84440f5616a66c13b6d))
+
 ## 1.0.0 (2024-01-27)
 
 
