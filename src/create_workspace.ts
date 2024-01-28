@@ -7,12 +7,16 @@ export const createWorkspace = async (opts: {
   location: URL;
 
   removeWorkspaceAfter?: boolean;
+
+  template?: string;
 }) => {
   const location = opts.location;
   const removeWorkspaceAfter = opts.removeWorkspaceAfter ?? false;
+  const template = opts.template ?? "bun";
 
   await mkdir(location, { recursive: true });
   await exec({ cmd: ["bun", "init", "-y"], cwd: location.pathname });
+
   await exec({
     cmd: [...globalConfig.editorWatch, location.pathname],
     cwd: location.pathname,

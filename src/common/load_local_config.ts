@@ -2,7 +2,11 @@ import { ENOENT } from "constants";
 import { homedir } from "os";
 import { pathToFileURL } from "url";
 import * as YAML from "yaml";
-import { parseConfigDemoLocation, parseConfigEditor, parseConfigEditorWatch } from "./types_validator";
+import {
+  parseConfigDemoLocation,
+  parseConfigEditor,
+  parseConfigEditorWatch,
+} from "./types_validator";
 
 const fetchConfigFile = async (location: URL) => {
   try {
@@ -29,14 +33,16 @@ export const loadLocalConfig = async (opts?: { configLocation?: URL }) => {
   const configs = await fetchConfigFile(configLocation);
 
   const home = pathToFileURL(`${homedir()}/`);
-  const demoLocationString = parseConfigDemoLocation(configs)
+  const demoLocationString = parseConfigDemoLocation(configs);
   const defaultDemosLocation = new URL(".demos/", home);
 
   return {
-    editor: parseConfigEditor(configs) ?? ['code', '-n'],
-    editorWatch: parseConfigEditorWatch(configs) ?? ['code', '-w', '-n'],
-    demosLocation: demoLocationString ? new URL(demoLocationString, home) : defaultDemosLocation,
-  }
+    editor: parseConfigEditor(configs) ?? ["code", "-n"],
+    editorWatch: parseConfigEditorWatch(configs) ?? ["code", "-w", "-n"],
+    demosLocation: demoLocationString
+      ? new URL(demoLocationString, home)
+      : defaultDemosLocation,
+  };
 };
 
-export const globalConfig = await loadLocalConfig()
+export const globalConfig = await loadLocalConfig();

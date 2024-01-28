@@ -6,6 +6,8 @@
   "devDependencies": {
     "@jondotsoy/flags": "^2.0.2",
     "@types/bun": "latest",
+    "base64-js": "^1.5.1",
+    "nanostores": "^0.9.5",
     "prettier": "^3.2.4",
     "yaml": "^2.3.4"
   },
