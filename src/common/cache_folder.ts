@@ -1,7 +1,6 @@
-import { mkdir, writeFile } from "fs/promises";
+import { exists, mkdir, readFile, writeFile } from "fs/promises";
 import { atom } from "nanostores";
 import * as base64 from "base64-js";
-import { multiFetch } from "./multi_fetch";
 
 export class CacheFolder {
   ready = atom(false);
@@ -55,18 +54,21 @@ export class CacheFolder {
 
   async responseToJson(response: Response) {
     return {
+      url: response.url,
+      ok: response.ok,
+      type: response.type,
+      redirected: response.redirected,
       status: response.status,
-      headers: Array.from(response.headers.entries()),
       statusText: response.statusText,
+      headers: Array.from(response.headers.entries()),
       body: base64.fromByteArray(new Uint8Array(await response.arrayBuffer())),
     };
   }
 
   async match(request: Request) {
     const destination = await this.getDestinationByRequest(request);
-    const response = await multiFetch(new Request(`${destination}`), null);
-    if (response.status === 404) return null;
-    const payload = await response.json();
+    if (!await exists(destination)) return null;
+    const payload = JSON.parse(new TextDecoder().decode(await readFile(destination)))
     return this.jsonToResponse(payload);
   }
 
