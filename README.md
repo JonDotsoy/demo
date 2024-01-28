@@ -1,6 +1,6 @@
 # demo
 
-The `demo` project provides a simple and efficient way to manage temporal workspaces. It offers a straightforward setup process using `make` or `bun install` for dependency management. The usage is user-friendly, allowing the creation of new workspaces with the `demo create` command, and supports clean slate operations with the `demo create --rm` option to remove the workspace before creation.
+The `demo` project provides a simple and efficient way to manage temporal workspaces. It offers a straightforward setup process using `make` or `bun install` for dependency management. The usage is user-friendly, allowing the creation of new workspaces with the `demo create` command, and supports clean slate operations with the `demo create --rm` option to remove the workspace before use.
 
 ## Installing
 
