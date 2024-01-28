@@ -1,5 +1,10 @@
 import { test, expect } from "bun:test";
-import { createTemplate, templateNameToSource } from "./create_template";
+import {
+  createTemplate,
+  templateNameToSource,
+  writeTemplate,
+} from "./create_template";
+import { CacheFolder } from "./common/cache_folder";
 
 test("parse template name", () => {
   expect(`${templateNameToSource("default")}`).toEndWith("bun.tgz");
@@ -14,5 +19,24 @@ test("parse template name", () => {
   );
   expect(`${templateNameToSource("github/codeql@v1")}`).toEndWith(
     "https://github.com/github/codeql/archive/refs/tags/v1.tar.gz",
+  );
+});
+
+test("create a empty template", async () => {
+  const cache = new CacheFolder(new URL(".cache/", import.meta.url));
+
+  const template = await createTemplate("empty", { cache });
+
+  expect(template).toBeInstanceOf(Set);
+});
+
+test("write a ts template", async () => {
+  const cache = new CacheFolder(new URL(".cache/", import.meta.url));
+
+  const template = await createTemplate("ts", { cache });
+
+  await writeTemplate(
+    template,
+    new URL("__samples__/sample1/", import.meta.url),
   );
 });
