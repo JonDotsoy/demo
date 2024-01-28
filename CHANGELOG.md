@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/JonDotsoy/demo/compare/v1.0.0...v1.1.0) (2024-01-28)
+
+
+### Features
+
+* Add Homebrew installation instructions to ([148be7c](https://github.com/JonDotsoy/demo/commit/148be7cb6a6b92131d411fb67f94e679e62fe500))
+
 ## 1.0.0 (2024-01-27)
 
 
