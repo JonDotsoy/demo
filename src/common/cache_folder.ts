@@ -67,8 +67,10 @@ export class CacheFolder {
 
   async match(request: Request) {
     const destination = await this.getDestinationByRequest(request);
-    if (!await exists(destination)) return null;
-    const payload = JSON.parse(new TextDecoder().decode(await readFile(destination)))
+    if (!(await exists(destination))) return null;
+    const payload = JSON.parse(
+      new TextDecoder().decode(await readFile(destination)),
+    );
     return this.jsonToResponse(payload);
   }
 
