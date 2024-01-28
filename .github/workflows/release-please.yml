@@ -34,8 +34,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
       - run: bun install && bun run build
-      - run: tar -cvzf demo-mac.tar.gz -C dist demo
-      - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-mac.tar.gz
+      - run: tar -cvzf demo-$(uname -s)-$(uname -m).tar.gz -C dist demo
+      - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-$(uname -s)-$(uname -m).tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   publish_linux_bin:
@@ -46,8 +46,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
       - run: bun install && bun run build
-      - run: tar -cvzf demo-linux.tar.gz -C dist demo
-      - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-linux.tar.gz
+      - run: tar -cvzf demo-$(uname -s)-$(uname -m).tar.gz -C dist demo
+      - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-$(uname -s)-$(uname -m).tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -59,7 +59,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v1
       - run: bun install && bun run build
-      - run: tar -cvzf demo-win.tar.gz -C dist demo
-      - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-win.tar.gz
+      - run: tar -cvzf demo-$(uname -s)-$(uname -m).tar.gz -C dist demo
+      - run: gh release upload ${{ needs.release-please.outputs.tag_name }} demo-$(uname -s)-$(uname -m).tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
