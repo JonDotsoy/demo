@@ -3,7 +3,6 @@ import { atom } from "nanostores";
 import * as base64 from "base64-js";
 import { multiFetch } from "./multi_fetch";
 
-
 export class CacheFolder {
   ready = atom(false);
   booting: Promise<void>;
@@ -33,22 +32,25 @@ export class CacheFolder {
     const url = request.url;
     const method = request.method;
 
-    return crypto.subtle.digest('SHA-512', new TextEncoder().encode(`${method} ${url}`));
+    return crypto.subtle.digest(
+      "SHA-512",
+      new TextEncoder().encode(`${method} ${url}`),
+    );
   }
 
   async getDestinationByRequest(request: Request) {
-    return new URL(`${Array.from(new Uint8Array(await this.digestRequest(request)), e => e.toString(16)).join('')}.json`, this.location);
+    return new URL(
+      `${Array.from(new Uint8Array(await this.digestRequest(request)), (e) => e.toString(16)).join("")}.json`,
+      this.location,
+    );
   }
 
   jsonToResponse(payload: any) {
-    return new Response(
-      base64.toByteArray(payload.body),
-      {
-        status: payload.status,
-        headers: payload.headers,
-        statusText: payload.statusText,
-      }
-    );
+    return new Response(base64.toByteArray(payload.body), {
+      status: payload.status,
+      headers: payload.headers,
+      statusText: payload.statusText,
+    });
   }
 
   async responseToJson(response: Response) {
@@ -70,6 +72,9 @@ export class CacheFolder {
 
   async update(request: Request, response: Response) {
     const destination = await this.getDestinationByRequest(request);
-    await writeFile(destination, JSON.stringify(await this.responseToJson(response), null, 2));
+    await writeFile(
+      destination,
+      JSON.stringify(await this.responseToJson(response), null, 2),
+    );
   }
 }

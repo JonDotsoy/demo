@@ -23,7 +23,6 @@ export const main = async (args: string[]) => {
 
   const { create } = flags<Options>(args, {}, rules);
 
-
   if (create) return createCmd(create);
 
   console.log(makeHelmMessage("demo", rules));

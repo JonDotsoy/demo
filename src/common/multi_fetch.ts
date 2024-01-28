@@ -14,7 +14,7 @@ export const multiFetch = async (
   );
 
   if (ableToUseCache) {
-    const responseCached = await cacheFolder?.match(request) ?? null;
+    const responseCached = (await cacheFolder?.match(request)) ?? null;
     if (responseCached) {
       return responseCached;
     }
@@ -30,7 +30,7 @@ export const multiFetch = async (
   const updateCache = async (response: Response) => {
     await cacheFolder?.update(request, response);
     return response;
-  }
+  };
 
   return await updateCache(await fetch(url));
 };
