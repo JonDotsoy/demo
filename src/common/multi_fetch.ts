@@ -28,7 +28,7 @@ export const multiFetch = async (
   }
 
   const updateCache = async (response: Response) => {
-    await cacheFolder?.update(request, response);
+    await cacheFolder?.update(request, response.clone());
     return response;
   };
 

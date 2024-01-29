@@ -17,6 +17,7 @@ export const create = async (args: string[]) => {
     showHelp: boolean;
     name: string;
     template: string;
+    noOpen: boolean;
   };
 
   const rules: Rule<Options>[] = [
@@ -32,9 +33,12 @@ export const create = async (args: string[]) => {
     rule(flag("--help", "-h"), isBooleanAt("showHelp"), {
       description: "show this message",
     }),
+    rule(flag("--no-open"), isBooleanAt("noOpen"), {
+      description: "omit open editor",
+    }),
   ];
 
-  const { removeWorkspaceAfter, showHelp, name } = flags<Options>(
+  const { removeWorkspaceAfter, showHelp, name, noOpen } = flags<Options>(
     args,
     {},
     rules,
@@ -47,8 +51,13 @@ export const create = async (args: string[]) => {
 
   const location = new URL(relativePath, globalConfig.demosLocation);
 
+  let openEditor = true;
+
+  if (noOpen) openEditor = false;
+
   await createWorkspace({
     location,
     removeWorkspaceAfter: removeWorkspaceAfter,
+    openEditor,
   });
 };
