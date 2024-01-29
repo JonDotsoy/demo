@@ -3,14 +3,18 @@ import tar from "tar-stream";
 import { multiFetch } from "./common/multi_fetch";
 import stream from "stream";
 import { createGunzip, gunzip } from "zlib";
-import { exists, mkdir, writeFile } from "fs/promises";
+import { exists, mkdir, readFile, rm, unlink, writeFile } from "fs/promises";
+import { ulid } from "ulid";
+import { tmpdir } from "os";
+import { pathToFileURL } from "url";
+import { exec } from "./common/exec";
 
 type Entry = {
   path: URL;
   body: Uint8Array;
 };
 
-type Template = Iterable<Entry>;
+type Template = AsyncIterable<Entry>;
 
 const githubRepoMatch = /^(?<username>[\w\.\-]+)\/(?<repo>[\w\.\-]+)$/;
 const githubRepoTagMatch =
@@ -22,11 +26,17 @@ const sourcesRules: [
 ][] = [
   [
     (name) => ["default", "bun", "ts"].includes(name),
-    () => new URL(`common/defaultTemplates/bun.tgz`, import.meta.url),
+    () =>
+      new URL(
+        "https://raw.githubusercontent.com/JonDotsoy/demo/develop/src/common/defaultTemplates/bun.tgz",
+      ),
   ],
   [
     (name) => name === "empty",
-    () => new URL(`common/defaultTemplates/empty.tgz`, import.meta.url),
+    () =>
+      new URL(
+        "https://raw.githubusercontent.com/JonDotsoy/demo/develop/src/common/defaultTemplates/empty.tgz",
+      ),
   ],
   [
     (name) => name.startsWith(`http://`) || name.startsWith(`https://`),
@@ -55,45 +65,85 @@ export const templateNameToSource = (name: string) => {
   return null;
 };
 
-export const createTemplate = async (
+const useTempLocation = async (opts?: {
+  keep?: boolean;
+  verbose?: boolean;
+}) => {
+  const keep = opts?.keep ?? false;
+  const verbose = opts?.verbose ?? false;
+
+  const tmpLocation = new URL(
+    `demo_template_${ulid()}/`,
+    pathToFileURL(`${tmpdir()}/`),
+  );
+  await mkdir(tmpLocation, { recursive: true });
+  if (verbose) console.log(`Create tmp directory ${tmpLocation}`);
+
+  return {
+    url: tmpLocation,
+    async [Symbol.asyncDispose]() {
+      if (!keep) await rm(tmpLocation, { recursive: true });
+    },
+  };
+};
+
+export async function* createTemplate(
   templateName: string,
-  opts?: { cache?: CacheFolder },
-) => {
+): AsyncGenerator<Entry> {
   const source = templateNameToSource(templateName);
   if (!source) throw new Error(`Invalid ${templateName} source name`);
 
+  await using tempLocation = await useTempLocation({ keep: true });
+
   const response = await multiFetch(new Request(`${source}`));
+  if (!response.ok)
+    throw new Error(
+      `Invalid ${templateName} source, status ${response.status}`,
+    );
 
-  const { promise, resolve } = Promise.withResolvers();
-  const extract = tar.extract({});
-  const entries = new Set<Entry>();
-  extract.on("entry", (header, stream, cb) => {
-    const chunks: number[] = [];
-    stream.on("data", (data) => {
-      chunks.push(...data);
-    });
-    stream.once("close", () => {
-      entries.add({
-        path: new URL(header.name, "file:///"),
-        body: new Uint8Array(chunks),
-      });
-      cb();
-    });
+  const tmpTemplateLocation = new URL(`template.tgz`, tempLocation.url);
+  const tmpTemplateExtractLocation = new URL(`extract/`, tempLocation.url);
+  await mkdir(tmpTemplateExtractLocation, { recursive: true });
+
+  await writeFile(
+    tmpTemplateLocation,
+    new Uint8Array(await response.arrayBuffer()),
+  );
+
+  await exec({
+    cmd: [
+      "tar",
+      "-xzvf",
+      tmpTemplateLocation.pathname,
+      "-C",
+      tmpTemplateExtractLocation.pathname,
+    ],
+    cwd: tmpTemplateExtractLocation.pathname,
   });
-  extract.once("close", () => resolve());
-  const ent = stream.Readable.fromWeb(response.body!)
-    .pipe(createGunzip())
-    .pipe(extract);
 
-  await promise;
+  const glob = new Bun.Glob("**");
 
-  return entries;
-};
+  for await (const file of glob.scan({
+    cwd: tmpTemplateExtractLocation.pathname,
+    dot: true,
+    absolute: false,
+  })) {
+    const location = new URL(file, "file:///");
+    const absolute = new URL(file, tmpTemplateExtractLocation);
+
+    const entry: Entry = {
+      path: location,
+      body: new Uint8Array(await readFile(absolute)),
+    };
+
+    yield entry;
+  }
+}
 
 export const writeTemplate = async (template: Template, destination: URL) => {
   await mkdir(new URL("./", destination), { recursive: true });
 
-  for (const entry of template) {
+  for await (const entry of template) {
     const entryDestination = new URL(`.${entry.path.pathname}`, destination);
     // console.log("🚀 ~ writeTemplate ~ entryDestination:", entryDestination)
     const isFolder = entry.path.pathname.endsWith("/");

@@ -1,7 +1,8 @@
 import { exists, stat } from "fs/promises";
 import { CacheFolder } from "./cache_folder";
+import { globalConfig } from "./load_local_config";
 
-const defaultCacheFolder = new CacheFolder(new URL(".cache/", import.meta.url));
+const defaultCacheFolder = new CacheFolder(globalConfig.cacheLocation);
 
 export const multiFetch = async (
   request: Request,

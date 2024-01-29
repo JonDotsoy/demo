@@ -25,10 +25,17 @@ const fetchConfigFile = async (location: URL) => {
   }
 };
 
-export const loadLocalConfig = async (opts?: { configLocation?: URL }) => {
+export const loadLocalConfig = async (opts?: {
+  configLocation?: URL;
+  cacheRequests?: URL;
+}) => {
   const configLocation =
     opts?.configLocation ??
     new URL(`.demo/config.yaml`, pathToFileURL(`${homedir()}/`));
+
+  const cacheLocation =
+    opts?.cacheRequests ??
+    new URL(`.demo/.cache/`, pathToFileURL(`${homedir()}/`));
 
   const configs = await fetchConfigFile(configLocation);
 
@@ -39,6 +46,7 @@ export const loadLocalConfig = async (opts?: { configLocation?: URL }) => {
   return {
     editor: parseConfigEditor(configs) ?? ["code", "-n"],
     editorWatch: parseConfigEditorWatch(configs) ?? ["code", "-w", "-n"],
+    cacheLocation,
     demosLocation: demoLocationString
       ? new URL(demoLocationString, home)
       : defaultDemosLocation,
