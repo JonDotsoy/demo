@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.1.0](https://github.com/JonDotsoy/demo/compare/v1.0.4...v1.1.0) (2024-01-29)
+
+
+### Features
+
+* Add caching layer to multiFetch utility ([b662617](https://github.com/JonDotsoy/demo/commit/b6626174cc488840fdcb91383f58ba19da210dd4))
+* Add tar-stream handling in template creation ([65f3480](https://github.com/JonDotsoy/demo/commit/65f34809d960d5e677d707e6c3593ad4138de65b))
+* Improve workspace creation and template ([560ac24](https://github.com/JonDotsoy/demo/commit/560ac248228afd7cc86ed5553020996f73c83b15))
+* Template selection capability added to ([c9e308b](https://github.com/JonDotsoy/demo/commit/c9e308b050195dc6083df38ada94af355a82be9e))
+
 ## [1.0.4](https://github.com/JonDotsoy/demo/compare/v1.0.3...v1.0.4) (2024-01-28)
 
 ### Miscellaneous Chores
