@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/JonDotsoy/demo/compare/v1.1.0...v1.2.0) (2024-01-29)
+
+
+### Features
+
+* Add EditorConfig, prettierignore and update ([283eef4](https://github.com/JonDotsoy/demo/commit/283eef4e9c16fdd45924adbb0a868afdc1545e9e))
+* Improve template generation and caching ([68aa2a3](https://github.com/JonDotsoy/demo/commit/68aa2a3a1ae2fa4b669f2a723c9f93e01a4a7762))
+
 ## [1.1.0](https://github.com/JonDotsoy/demo/compare/v1.0.4...v1.1.0) (2024-01-29)
 
 
